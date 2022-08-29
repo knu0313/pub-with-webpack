@@ -6,6 +6,7 @@ const PATH_PAGE = path.resolve(PATH_SRC, 'page')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const setHtmlPlugin = function (dir, from) {
   const files = fs.readdirSync(dir)
@@ -48,8 +49,16 @@ module.exports = {
     rules: [
       {
         test: /\.html$/,
-        use: ['handlebars-loader']
-      }
+        use: ['handlebars-loader'],
+      },
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
     ],
   },
   plugins: [
@@ -80,12 +89,22 @@ module.exports = {
     }),
     // page/
     ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
+    // new MiniCssExtractPlugin({
+    //   filename: 'css/[name].css'
+    // }),
+    new MiniCssExtractPlugin(),
   ],
   devServer: {
     static: {
       directory: path.join(__dirname, 'src'),
     },
-    compress: true,
+    compress: false,
     port: 9000,
   },
+  // devServer: {
+  //   open: true,
+  //   contentBase: PATH_OUTPUT,
+  //   watchContentBase: true,
+  //   inline: true,
+  // },
 }
