@@ -16,7 +16,7 @@
       }
       html,
       body {
-        background-color: #3a3d41;
+        background-color: #333;
         color: #fff;
       }
       body {
@@ -52,8 +52,24 @@
       }
 
       header .control-list button {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
         margin-left: 5px;
-        font-size: 10px;
+        background: #ddd;
+        color: #000;
+        border: 0;
+        border-radius: 3px;
+        text-align: center;
+      }
+
+      header .control-list button::before {
+        content: '';
+        display: block;
+      }
+
+      header .control-list .open-all::before {
+        content: '+';
       }
 
       .main {
@@ -138,7 +154,7 @@
       }
 
       tbody tr:nth-child(2n) {
-        background: #eee;
+        background: #444;
       }
 
       .title {
@@ -194,8 +210,8 @@
       <header>
         <h1>index</h1>
         <div class="control-list">
-          <button class="close">-</button>
-          <button class="open">+</button>
+          <button class="close-all"></button>
+          <button class="open-all"></button>
         </div>
       </header>
       <!-- // header -->
@@ -272,13 +288,24 @@
               <td class="complete"></td>
               <td class="note"></td>
             </tr>
+            <tr>
+              <td>Main</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="link">
+                <a href="page/page2.html" target="_blank">page2</a>
+              </td>
+              <td class="complete"></td>
+              <td class="note"></td>
+            </tr>
           </tbody>
         </table>
         <!-- // table -->
       </div>
     </div>
     <script>
-      document.querySelector('.control-list .close').onclick = function () {
+      document.querySelector('.control-list .close-all').onclick = function () {
         var el = document.querySelectorAll('.title')
         var len = el.length
         if (len > 0) {
@@ -287,7 +314,7 @@
         }
       }
 
-      document.querySelector('.control-list .open').onclick = function () {
+      document.querySelector('.control-list .open-all').onclick = function () {
         var el = document.querySelectorAll('.mini')
         var len = el.length
         if (len > 0) {

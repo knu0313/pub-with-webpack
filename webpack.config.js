@@ -37,18 +37,13 @@ const setHtmlPlugin = function (dir, from) {
 }
 
 module.exports = {
-  resolve: {
-    alias: {
-      Partials: path.resolve(__dirname, 'src/_partials'),
-    },
-  },
   entry: {
     common: {
       filename: 'js/common-ui.js',
-      import: './src/js/common-ui.js',
+      import: path.resolve(PATH_SRC, 'js/common-ui.js'),
     },
     style: {
-      import: './src/css/style.scss',
+      import: path.resolve(PATH_SRC, 'css/common.scss'),
     },
   },
   output: {
@@ -58,7 +53,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.html$/,
+        test: /\.(html|hbs)$/,
         use: ['handlebars-loader'],
       },
       {
@@ -84,6 +79,11 @@ module.exports = {
             return path.relative(PATH_SRC, absoluteFilename)
           },
         },
+        // normalize.css
+        {
+          from: './src/css/normalize.css',
+          to: './css/'
+        }
       ],
     }),
     // index.html
@@ -106,6 +106,7 @@ module.exports = {
     compress: false,
     port: 9000,
     hot: true,
+    open: true,
   },
   // devServer: {
   //   open: true,
