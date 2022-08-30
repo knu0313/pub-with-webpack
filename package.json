@@ -4,7 +4,7 @@
   "description": "웹팩 퍼블리싱 기본세팅",
   "main": "index.js",
   "scripts": {
-    "build": "npx webpack --mode=production && npx prettier --write ./dist/page/",
+    "build": "npx webpack --mode=production && npx prettier --write ./dist/page/ ./dist/css",
     "start": "webpack-dev-server --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
     "handlebars-loader": "^1.7.2",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",

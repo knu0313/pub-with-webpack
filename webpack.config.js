@@ -13,21 +13,23 @@ const setHtmlPlugin = function (dir, from) {
   const ret = []
   const pages = files.forEach((file) => {
     const p = path.resolve(dir, file)
-    if(fs.lstatSync(p).isDirectory()) {
+    if (fs.lstatSync(p).isDirectory()) {
       const d = setHtmlPlugin(p, from)
-      if(d && d.length) {
+      if (d && d.length) {
         ret.push(...d)
       }
     } else if (file.substr(-5) === '.html') {
       // html
-      ret.push(new HtmlWebpackPlugin({
-        title: file,
-        filename: from ? path.relative(from, p) : p,
-        template: p,
-        minify: false,
-        inject: 'body',
-        chunks: ['common'],
-      }))
+      ret.push(
+        new HtmlWebpackPlugin({
+          title: file,
+          filename: from ? path.relative(from, p) : p,
+          template: p,
+          minify: false,
+          inject: 'body',
+          chunks: ['common'],
+        })
+      )
     }
   })
 
@@ -35,10 +37,18 @@ const setHtmlPlugin = function (dir, from) {
 }
 
 module.exports = {
+  resolve: {
+    alias: {
+      Partials: path.resolve(__dirname, 'src/_partials'),
+    },
+  },
   entry: {
     common: {
       filename: 'js/common-ui.js',
       import: './src/js/common-ui.js',
+    },
+    style: {
+      import: './src/css/style.scss',
     },
   },
   output: {
@@ -52,12 +62,8 @@ module.exports = {
         use: ['handlebars-loader'],
       },
       {
-        test: /\.scss$/,
+        test: /\.(sc|c)ss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
   },
@@ -67,18 +73,18 @@ module.exports = {
         // lib
         {
           from: './src/js/lib/**/*',
-          to ({ absoluteFilename }) {
+          to({ absoluteFilename }) {
             return path.relative(PATH_SRC, absoluteFilename)
-          }
+          },
         },
         // img
         {
           from: './src/img/**/*',
-          to ({ absoluteFilename }) {
+          to({ absoluteFilename }) {
             return path.relative(PATH_SRC, absoluteFilename)
-          }
+          },
         },
-      ]
+      ],
     }),
     // index.html
     new HtmlWebpackPlugin({
@@ -89,10 +95,9 @@ module.exports = {
     }),
     // page/
     ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
-    // new MiniCssExtractPlugin({
-    //   filename: 'css/[name].css'
-    // }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+    }),
   ],
   devServer: {
     static: {
@@ -100,6 +105,7 @@ module.exports = {
     },
     compress: false,
     port: 9000,
+    hot: true,
   },
   // devServer: {
   //   open: true,
