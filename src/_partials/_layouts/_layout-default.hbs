@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="kor">
+  {{> ../_head.hbs}}
+  <body>
+    <div class="wrap">
+      {{> ../_header.hbs title=title}}
+
+      {{> @partial-block }}
+
+      {{> ../_footer.hbs}}
+    </div>
+    <script type="text/javascript" src="../js/lib/jquery-1.9.1.js"></script>
+  </body>
+</html>

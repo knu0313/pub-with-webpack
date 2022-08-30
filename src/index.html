@@ -34,6 +34,7 @@
         display: flex;
         -webkit-align-items: center;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         padding: 10px;
         background: #000;
@@ -53,6 +54,7 @@
 
       header .control-list button {
         display: inline-block;
+        position: relative;
         width: 20px;
         height: 20px;
         margin-left: 5px;
@@ -64,12 +66,26 @@
       }
 
       header .control-list button::before {
-        content: '';
+        content: "";
         display: block;
+        position: absolute;
+        left: 20%;
+        top: 9px;
+        height: 2px;
+        background: #000;
+        width: 60%;
       }
 
-      header .control-list .open-all::before {
-        content: '+';
+      header .control-list .open-all::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 20%;
+        top: 9px;
+        height: 2px;
+        background: #000;
+        width: 60%;
+        transform: rotateZ(90deg);
       }
 
       .main {
@@ -83,7 +99,7 @@
       }
 
       .main h2::before {
-        content: '-';
+        content: "-";
         display: inline-block;
         vertical-align: top;
         text-align: center;
@@ -97,7 +113,7 @@
       }
 
       .main h2.on::before {
-        content: '+';
+        content: "+";
       }
 
       .main h2.on + table {
@@ -178,7 +194,7 @@
       }
 
       .title th::before {
-        content: '';
+        content: "";
         display: inline-block;
         vertical-align: top;
         width: 0;
@@ -229,12 +245,9 @@
             <col class="note" />
           </colgroup>
 
-          <!--  -->
+          <!-- common -->
           <thead>
-            <tr
-              class="title"
-              onclick="this.parentElement.classList.toggle('mini');"
-            >
+            <tr class="title">
               <th colspan="7">Common</th>
             </tr>
             <tr>
@@ -258,12 +271,56 @@
               <td class="note"></td>
             </tr>
           </tbody>
+          <!-- // common -->
+
+          <!-- layout -->
+          <thead>
+            <tr class="title">
+              <th colspan="7">layout</th>
+            </tr>
+            <tr>
+              <th>lv[1]</th>
+              <th>lv[2]</th>
+              <th>lv[3]</th>
+              <th>lv[4]</th>
+              <th>link</th>
+              <th>완료여부</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>layout</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="link"><a href="page/layout/default.html" target="_blank">default</a></td>
+              <td class="complete"></td>
+              <td class="note"></td>
+            </tr>
+            <tr>
+              <td>01</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="link"><a href="page/layout/01.html" target="_blank">01</a></td>
+              <td class="complete"></td>
+              <td class="note"></td>
+            </tr>
+            <tr>
+              <td>02</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="link"><a href="page/layout/02.html" target="_blank">02</a></td>
+              <td class="complete"></td>
+              <td class="note"></td>
+            </tr>
+          </tbody>
+          <!-- // layout -->
 
           <thead>
-            <tr
-              class="title"
-              onclick="this.parentElement.classList.toggle('mini');"
-            >
+            <tr class="title">
               <th colspan="7">메인</th>
             </tr>
             <tr>
@@ -288,45 +345,34 @@
               <td class="complete"></td>
               <td class="note"></td>
             </tr>
-            <tr>
-              <td>Main</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="link">
-                <a href="page/page2.html" target="_blank">page2</a>
-              </td>
-              <td class="complete"></td>
-              <td class="note"></td>
-            </tr>
           </tbody>
         </table>
         <!-- // table -->
       </div>
     </div>
     <script>
-      document.querySelector('.control-list .close-all').onclick = function () {
-        var el = document.querySelectorAll('.title')
-        var len = el.length
+      document.querySelector(".control-list .close-all").onclick = function () {
+        var el = document.querySelectorAll(".title");
+        var len = el.length;
         if (len > 0) {
-          for (var i = 0; i < len; i++)
-            el[i].parentElement.classList.add('mini')
+          for (var i = 0; i < len; i++) el[i].parentElement.classList.add("mini");
         }
-      }
+      };
 
-      document.querySelector('.control-list .open-all').onclick = function () {
-        var el = document.querySelectorAll('.mini')
-        var len = el.length
+      document.querySelector(".control-list .open-all").onclick = function () {
+        var el = document.querySelectorAll(".mini");
+        var len = el.length;
         if (len > 0) {
-          for (var i = 0; i < len; i++) el[i].classList.remove('mini')
+          for (var i = 0; i < len; i++) el[i].classList.remove("mini");
         }
-      }
+      };
 
-      document.querySelector('.main .title').forEach((el) => {
-        el.addEventListener('click', () => {
-          el.parentElement.classList.toggle('mini')
-        })
-      })
+      document.querySelectorAll(".main .title").forEach(el => {
+        el.addEventListener("click", () => {
+          console.log('click')
+          el.parentElement.classList.toggle("mini");
+        });
+      });
     </script>
   </body>
 </html>
