@@ -3,9 +3,10 @@ const fs = require('fs')
 
 const PATH_SRC = path.resolve(__dirname, 'src')
 const PATH_PAGE = path.resolve(PATH_SRC, 'page')
+const PATH_DIST = path.resolve(__dirname, 'dist')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const setHtmlPlugin = function (dir, from) {
@@ -47,7 +48,7 @@ module.exports = {
     },
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: PATH_DIST,
     clean: true,
   },
   module: {
@@ -57,13 +58,34 @@ module.exports = {
         use: ['handlebars-loader'],
       },
       {
-        test: /\.(sc|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        test:/\.s?css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+                postcssOptions: {
+                    plugins: [
+                        [
+                        'autoprefixer',
+                        ],
+                    ],
+                },
+            }
+          },
+          'sass-loader'
+        ],
       },
     ],
   },
   plugins: [
-    new CopyPlugin({
+    new CopyWebpackPlugin ({
       patterns: [
         // lib
         {
@@ -96,6 +118,7 @@ module.exports = {
     // page/
     ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
     new MiniCssExtractPlugin({
+      linkType: false,
       filename: 'css/[name].css',
     }),
   ],
@@ -108,10 +131,4 @@ module.exports = {
     hot: true,
     open: true,
   },
-  // devServer: {
-  //   open: true,
-  //   contentBase: PATH_OUTPUT,
-  //   watchContentBase: true,
-  //   inline: true,
-  // },
 }
