@@ -55,7 +55,14 @@ module.exports = {
     rules: [
       {
         test: /\.(html|hbs)$/,
-        use: ['handlebars-loader'],
+        use: [
+          {
+            loader: 'handlebars-loader',
+            options: {
+              helperDirs: path.join(__dirname, '_helpers'),
+            }
+          }
+        ],
       },
       {
         test:/\.s?css$/,
