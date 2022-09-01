@@ -1,3 +1,8 @@
-<label>
-  
+<label class="checkbox{{#if class}} {{class}}{{/if}}">
+  <input type="checkbox"
+    {{#if id}}id="{{id}}"{{/if}}
+    {{#if checked}}checked{{/if}}
+    {{#if disabled}}disabled{{/if}}
+    {{#if name}}name="{{name}}"{{/if}}
+  ><i></i>{{#if text}}<span>{{text}}</span>{{/if}}{{#if @partial-block}}{{> @partial-block }}{{/if}}
 </label>

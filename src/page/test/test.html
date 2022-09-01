@@ -4,7 +4,15 @@
     test
     <span class="icon-test">hi</span>
     <span class="test">tdd</span>
-    {{#times 5}}hi {{/ times}}
+    {{> checkbox}}
+    <br>{{> checkbox checked=true }}
+    <br>{{> checkbox disabled=true }}
+    <br>{{> checkbox id="test"}}
+    <br>{{> checkbox class="abc abc2"}}
+    <br>{{> checkbox text="텍스트"}}
+    <br>{{> checkbox name="name"}}
+    <br>{{#> checkbox }}<em>em</em>{{/ checkbox}}
+    <br>
   </div>
 </main>
 {{/ layouts/default }}
