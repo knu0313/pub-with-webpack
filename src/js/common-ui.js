@@ -1,1 +1,3 @@
-console.log($)
+(function ($) {
+  console.log($)
+})(jQuery)
