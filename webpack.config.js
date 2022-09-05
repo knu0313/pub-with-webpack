@@ -36,107 +36,117 @@ const setHtmlPlugin = function (dir, from) {
 
   return ret
 }
-
-module.exports = {
-  entry: {
-    common: {
-      filename: 'js/common-ui.js',
-      import: path.resolve(PATH_SRC, 'js/common-ui.js'),
+module.exports = (env, argv) => {
+  const isDevMode = argv.mode === 'development'
+  return {
+    entry: {
+      common: {
+        filename: 'js/common-ui.js',
+        import: path.resolve(PATH_SRC, 'js/common-ui.js'),
+      },
+      style: {
+        import: path.resolve(PATH_SRC, 'css/common.scss'),
+      },
     },
-    style: {
-      import: path.resolve(PATH_SRC, 'css/common.scss'),
+    output: {
+      path: PATH_DIST,
+      clean: true,
     },
-  },
-  output: {
-    path: PATH_DIST,
-    clean: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(html|hbs)$/,
-        use: [
-          {
-            loader: 'handlebars-loader',
-            options: {
-              helperDirs: [path.resolve(__dirname, 'src/_helpers')],
-              partialDirs: [path.resolve(__dirname, 'src/_partials/common'), path.resolve(__dirname, 'src/_partials')]
+    module: {
+      rules: [
+        {
+          test: /\.(html|hbs)$/,
+          use: [
+            {
+              loader: 'handlebars-loader',
+              options: {
+                helperDirs: [path.resolve(__dirname, 'src/_helpers')],
+                partialDirs: [path.resolve(__dirname, 'src/_partials/common'), path.resolve(__dirname, 'src/_partials')]
+              }
             }
+          ],
+        },
+        {
+          test:/\.s?css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            // isDevMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                url: false
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                  postcssOptions: {
+                      plugins: [
+                          [
+                            'autoprefixer'
+                          ],
+                      ],
+                  },
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+              }
+            }
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new CopyWebpackPlugin ({
+        patterns: [
+          // lib
+          {
+            from: './src/js/lib/**/*',
+            to({ absoluteFilename }) {
+              return path.relative(PATH_SRC, absoluteFilename)
+            },
+          },
+          // img
+          {
+            from: './src/img/**/*',
+            to({ absoluteFilename }) {
+              return path.relative(PATH_SRC, absoluteFilename)
+            },
+          },
+          // normalize.css
+          {
+            from: './src/css/normalize.css',
+            to: './css/'
           }
         ],
-      },
-      {
-        test:/\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              url: false
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-                postcssOptions: {
-                    plugins: [
-                        [
-                        'autoprefixer',
-                        ],
-                    ],
-                },
-            }
-          },
-          'sass-loader'
-        ],
-      },
+      }),
+      // index.html
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/index.html',
+        minify: false,
+        inject: false,
+      }),
+      // page/
+      ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
+      new MiniCssExtractPlugin({
+        linkType: false,
+        filename: 'css/[name].css',
+      }),
     ],
-  },
-  plugins: [
-    new CopyWebpackPlugin ({
-      patterns: [
-        // lib
-        {
-          from: './src/js/lib/**/*',
-          to({ absoluteFilename }) {
-            return path.relative(PATH_SRC, absoluteFilename)
-          },
-        },
-        // img
-        {
-          from: './src/img/**/*',
-          to({ absoluteFilename }) {
-            return path.relative(PATH_SRC, absoluteFilename)
-          },
-        },
-        // normalize.css
-        {
-          from: './src/css/normalize.css',
-          to: './css/'
-        }
-      ],
-    }),
-    // index.html
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: './src/index.html',
-      minify: false,
-      inject: false,
-    }),
-    // page/
-    ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
-    new MiniCssExtractPlugin({
-      linkType: false,
-      filename: 'css/[name].css',
-    }),
-  ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'src'),
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'src'),
+      },
+      compress: false,
+      port: 9000,
+      hot: true,
+      open: true,
     },
-    compress: false,
-    port: 9000,
-    hot: true,
-    open: true,
-  },
+  }
 }
+
+

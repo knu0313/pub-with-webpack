@@ -15,4 +15,7 @@
   width: 20px;
   height: 20px;
   transform: translate3d(45deg);
+  ::after {
+    content: 'ttttt';
+  }
 }
