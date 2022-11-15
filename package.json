@@ -11,7 +11,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx webpack --mode=production && npx prettier --write ./dist/page/ ./dist/css",
-    "start": "webpack-dev-server --mode=development"
+    "start": "node --max_old_space_size=5000 node_modules/webpack-dev-server/bin/webpack-dev-server.js --mode=development --config webpack.config.js",
+    "dev": "webpack-dev-server --mode=development"
   },
   "author": "",
   "license": "ISC",

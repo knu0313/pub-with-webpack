@@ -1,16 +1,11 @@
 /* 추가 리셋 */
-$body-color: red;
-
 body {
-  color: $body-color;
 }
 body {
   margin: 0;
-  text-size-adjust: 100%;
 }
 ul, ol {
   margin: 0;
   li {
-    background: #000;
   }
 }

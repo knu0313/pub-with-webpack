@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="kor">
+  {{> head}}
+  <style>
+    /* guide css */
+    .guide-pre {
+      display: block;
+    }
+  </style>
+  <body>
+    <div class="wrap">
+      {{> @partial-block }}
+    </div>
+  </body>
+  <script>
+    document.querySelectorAll('.guide-pre-example').forEach((el) => {
+      console.log(el)
+    });
+  </script>
+</html>

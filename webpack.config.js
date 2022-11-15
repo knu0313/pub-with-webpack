@@ -6,16 +6,17 @@ const PATH_PAGE = path.resolve(PATH_SRC, 'page')
 const PATH_DIST = path.resolve(__dirname, 'dist')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CustomHtmlWebpackPlugin = require('./CustomHtmlWebpackPlugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const setHtmlPlugin = function (dir, from) {
+const getHtmlPluginArr = function (dir, from) {
   const files = fs.readdirSync(dir)
   const ret = []
   const pages = files.forEach((file) => {
     const p = path.resolve(dir, file)
     if (fs.lstatSync(p).isDirectory()) {
-      const d = setHtmlPlugin(p, from)
+      const d = getHtmlPluginArr(p, from)
       if (d && d.length) {
         ret.push(...d)
       }
@@ -36,6 +37,7 @@ const setHtmlPlugin = function (dir, from) {
 
   return ret
 }
+
 module.exports = (env, argv) => {
   const isDevMode = argv.mode === 'development'
   return {
@@ -103,12 +105,12 @@ module.exports = (env, argv) => {
       new CopyWebpackPlugin ({
         patterns: [
           // lib
-          {
-            from: './src/js/lib/**/*',
-            to({ absoluteFilename }) {
-              return path.relative(PATH_SRC, absoluteFilename)
-            },
-          },
+          // {
+          //   from: './src/js/lib/**/*',
+          //   to({ absoluteFilename }) {
+          //     return path.relative(PATH_SRC, absoluteFilename)
+          //   },
+          // },
           // img
           {
             from: './src/img/**/*',
@@ -131,7 +133,14 @@ module.exports = (env, argv) => {
         inject: false,
       }),
       // page/
-      ...setHtmlPlugin(PATH_PAGE, PATH_SRC),
+      ...getHtmlPluginArr(PATH_PAGE, PATH_SRC),
+      // new CustomHtmlWebpackPlugin({
+      //   dir: PATH_PAGE,
+      //   from: PATH_SRC,
+      //   minify: false,
+      //   inject: 'body',
+      //   chunks: ['common'],
+      // }),
       new MiniCssExtractPlugin({
         linkType: false,
         filename: 'css/[name].css',
